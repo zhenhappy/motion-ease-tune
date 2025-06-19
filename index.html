@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100Hz 声音缓解晕车</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 80px; }
+    button { font-size: 1.2em; padding: 12px 32px; margin-top: 30px; cursor: pointer; }
+    .desc { text-align: left; font-size: 1.1em; color: #333; max-width: 650px; margin: 0 auto 30px; }
+  </style>
+</head>
+<body>
+  <h1>100Hz 声音缓解晕车</h1>
+  <div class="desc">
+    日本名古屋大学的研究团队在《<a href="https://www.jstage.jst.go.jp/article/ehpm/30/0/30_24-00247/_html/-char/en">Environmental Health and Preventive Medicine</a>》期刊上发表论文，声称只需要聆听 1 分钟的特殊声音，就有可能预防晕车。这或许是因为声音刺激提升了耳朵的平衡感。在实验中，研究团队让约 80 名受试者以一定音量聆听 100 赫兹低音 1 分钟后，立即分别进行荡秋千、驾驶模拟器和乘车测试。结果显示，在听音后，有 7 至 8 成的受试者的身体摇晃程度减轻、乘车后的恶心等自诉症状有所缓解。该团队认为声音可能刺激了耳朵内部的“耳石”，从而使掌管平衡功能的细胞更有活力。
+  </div>
+  <button id="toggle-btn">播放 100Hz 声音</button>
+  <script>
+    let audioCtx = null;
+    let oscillator = null;
+    let isPlaying = false;
+    const btn = document.getElementById('toggle-btn');
+
+    btn.onclick = function() {
+      if (!isPlaying) {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 100;
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        isPlaying = true;
+        btn.textContent = '停止 100Hz 声音';
+      } else {
+        if (oscillator) {
+          oscillator.stop();
+          oscillator.disconnect();
+          oscillator = null;
+        }
+        isPlaying = false;
+        btn.textContent = '播放 100Hz 声音';
+      }
+    };
+  </script>
+</body>
+</html>
